@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "hb-autodl-v2"
+version = "0.1.0"
+description = ""
+authors = ["Felix Krömer <kroemer.felix@gmail.com>"]
+readme = "README.md"
+packages = [{include = "hb_autodl_v2"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+python-dotenv = "^1.0.0"
+
+[tool.poetry.scripts]
+hb_autodl_v2 = "hb_autodl_v2.hb_autodl_v2:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
