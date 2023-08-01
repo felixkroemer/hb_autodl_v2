@@ -1,5 +1,9 @@
 import os
+import random
+import re
 import secrets
+import string
+import subprocess
 
 import requests
 from dotenv import load_dotenv
@@ -8,6 +12,33 @@ from dotenv import load_dotenv
 def main():
     load_dotenv()
     session = login()
+
+    magazines = session.get(
+        os.getenv("HOME_URL")
+        + "/frontend/simpleMediaList,0-0-0-109-0-0-0-0-0-352189746-0.html"
+    )
+
+    newest_version_regex = re.compile('href="(mediaInfo,((\d+)-){10}(\d+)\.html)"')
+    newest_version = newest_version_regex.search(str(magazines.content)).group(1)
+    magazine_borrow = session.post(
+        os.getenv("HOME_URL") + "/frontend/" + newest_version
+    )
+    acsm_regex = re.compile('href="(https://acs4\..*?)"')
+    acsm_url = acsm_regex.search(str(magazine_borrow.content)).group(1)
+    acsm = session.get(acsm_url)
+
+    if acsm.status_code != 200:
+        print("Error {}".format(acsm.status_code))
+    else:
+        path = os.path.join(
+            os.environ["TMP"],
+            "HB_{}.acsm".format(
+                random.choices(string.ascii_uppercase + string.digits, k=16)
+            ),
+        )
+        with open(path, "wb") as f:
+            f.write(acsm.content)
+        subprocess.Popen([path], shell=True)
 
 
 def login():
