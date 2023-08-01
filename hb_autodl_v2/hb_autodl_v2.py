@@ -1,3 +1,5 @@
+# TODO: check https://indefero.soutade.fr//p/libgourou/, https://www.e-reader-forum.de/t/calibre-plugin-fuer-acsm-epub-konvertierung.157575/
+
 import os
 import random
 import re
